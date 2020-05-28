@@ -1,0 +1,27 @@
+
+*{
+	font-family: 'Nunito', sans-serif;
+	font-size: 14px;
+}
+
+.login{
+	text-align: center;
+	margin-top: 10%;
+}
+#floating_panel {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    z-index: 5;
+    background-color: #fff;
+    padding: 5px;
+    border: 1px solid #999;
+    text-align: center;
+    line-height: 30px;
+    padding-left: 10px;
+}
+
+tr:hover{
+    background-color: #f4fef4;
+    cursor: pointer;
+}

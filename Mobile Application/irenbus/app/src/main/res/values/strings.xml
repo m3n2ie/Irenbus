@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">irenbus</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="API_KEY">AIzaSyA2oDioGs6wGU6A4RFr379CjC4xdMyfjAw</string>
+</resources>

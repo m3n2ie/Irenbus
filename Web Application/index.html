@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Irenbus</title>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/6.5.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.5.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.5.0/firebase-database.js"></script>
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+    https://firebase.google.com/docs/web/setup#config-web-app -->
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyDeFQfSCv48A1milFYSDc6hRkQlSOQjutI",
+      authDomain: "irenbus-app.firebaseapp.com",
+      databaseURL: "https://irenbus-app.firebaseio.com",
+      projectId: "irenbus-app",
+      storageBucket: "irenbus-app.appspot.com",
+      messagingSenderId: "862290408776",
+      appId: "1:862290408776:web:20f311d74c9bf361"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <script src="script.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWmvgqWSRNTlt2OrIxzr2G1lz7mjJw2X4&callback=initMap"
+    async defer></script>
+</head>
+
+<body>
+
+<div class="container" id="login_div" style="display: none;">
+  <div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4" style="margin-top: 10%;">
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" id="email_field" placeholder="Enter email" name="email">
+        </div>
+        <div class="form-group">
+          <label for="pwd">Password:</label>
+          <input type="password" class="form-control" id="password_field" placeholder="Enter password" name="pswd">
+        </div>
+        <div class="text-center">
+          <button class="btn btn-primary" onclick="login()">Login</button>
+        </div>
+    </div>
+    <div class="col-sm-4"></div>
+  </div>
+</div>
+
+<div id="content_div" class="container" style="display: none">
+  <br><br>
+  <div class="row">
+    <div class="col-lg-3">
+      <h1>Dashboard</h1>
+    </div>
+    <div class="col-lg-6">
+      
+    </div>
+    <div class="col-lg-3 text-right">
+      <div class="row">
+        <p id="user_para">Welcome</p>&nbsp&nbsp
+        <button class="btn btn-danger" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </div>
+
+    <div class="container mt-3">
+      <br>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#map_tab" onclick="initMap();">Map</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#buses_tab">Buses</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#drivers_tab">Drivers</a>
+    </li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div id="map_tab" class="container tab-pane active"><br>
+      <h3>Map</h3>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <div id="floating_panel" class="card text-info"></div>
+            <div id="map" style="height: 400px; width: 1000px;"></div>
+          </div>    
+        </div>
+      </div>
+    </div>
+
+    <div id="buses_tab" class="container tab-pane fade"><br>
+      <h3>Buses</h3>
+
+      <div class="container">
+      <div class="container">
+        <div id="alert_space">
+        </div>
+        <div class="row">
+          <div class="col-md-2"></div>
+          <div class="col-md-8 text-center">
+            <button type="button" data-toggle="modal" data-target="#addBusModal" class="btn btn-outline-success">
+              Add a new bus
+            </button>
+          </div>
+          <div class="col-md-2"></div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-1"></div>
+          <div class="col-md-10 text-center">
+            <input id="buses-search-field" type="text" oninput="searchBuses();" style="margin-bottom: 4px;" class="form-control form-control" placeholder="Search...">
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+      </div>       
+  <table id="tblBuses" class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>Bus Code</th>
+        <th>Number Plate</th>
+        <th>Number</th>
+        <th>Route</th>
+      </tr>
+    </thead>
+  </table>
+</div>
+    </div>
+
+    <div id="drivers_tab" class="container tab-pane fade"><br>
+      <h3>Drivers</h3>
+      
+      <div class="container">
+
+      <div class="container">
+        <div class="row">
+          <div class="col-md-1"></div>
+          <div class="col-md-10 text-center">
+            <input id="drivers-search-field" type="text" oninput="searchDrivers();" style="margin-bottom: 4px;" class="form-control form-control" placeholder="Search...">
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+      </div>  
+
+    <table id="tblDrivers" class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>Picture</th>
+        <th>Full Name</th>
+        <th>busCode</th>
+      </tr>
+    </thead>
+    </table>
+
+    </div>
+    </div>
+
+
+  </div>
+</div>
+
+<!-- The Add Modal -->
+  <div class="modal fade" id="addBusModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Add a new bus</h4>
+          <button type="button" class="close" data-dismiss="modal">×</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div class="container">
+            <form>
+              <div class="form-group">
+                <label for="inputNumPlate">Number Plate</label>
+                <input type="text" class="form-control" id="inputNumPlate">
+              </div>
+              <div class="form-group">
+                <label for="inputBusNum">Bus Number</label>
+                <input type="text" class="form-control" id="inputBusNum">
+              </div>
+              <div class="form-group">
+                <label for="inputBusRoute">Bus Route</label>
+                <input type="text" id="inputBusRoute" class="form-control">
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" onclick="addBus();" data-dismiss="modal" class="btn btn-info">Add new bus</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+<!-- The Edit Modal -->
+  <div class="modal fade" id="editBusModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Update Bus Info</h4>
+          <button type="button" class="close" data-dismiss="modal">×</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div class="container">
+            <form>
+              <div class="form-group">
+                <label for="updateBusCodeField">Bus Code</label>
+                <input id="updateBusCodeField" class="form-control" readonly></input>
+              </div>
+              <div class="form-group">
+                <label for="updateNumPlate">Number Plate</label>
+                <input type="text" class="form-control" id="updateNumPlate">
+              </div>
+              <div class="form-group">
+                <label for="updateBusNum">Bus Number</label>
+                <input type="text" class="form-control" id="updateBusNum">
+              </div>
+              <div class="form-group">
+                <label for="updateBusRoute">Bus Route</label>
+                <input type="text" class="form-control" id="updateBusRoute">
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" data-dismiss="modal" onclick="$('#deleteConfirmModal').modal('show');" class="btn btn-outline-danger">Delete bus</button>
+          <button type="button" data-dismiss="modal" onclick="$('#updateConfirmModal').modal('show');" class="btn btn-info">Update bus info</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- The Update Confirm Modal -->
+  <div class="modal fade" id="updateConfirmModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Update Bus Info</h4>
+          <button type="button" class="close" data-dismiss="modal">×</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div class="container">
+            Are you sure?
+          </div>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" onclick="updateBus();" data-dismiss="modal" class="btn btn-info">Confirm update</button>
+          <button type="button" data-dismiss="modal" class="btn btn-dark">Cancel</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+<!-- The Delete Confirm Modal -->
+  <div class="modal fade" id="deleteConfirmModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Delete Bus</h4>
+          <button type="button" class="close" data-dismiss="modal">×</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div class="container">
+            Are you sure?
+          </div>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" onclick="deleteBus();" data-dismiss="modal" class="btn btn-danger">Confirm delete</button>
+          <button type="button" data-dismiss="modal" class="btn btn-dark">Cancel</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+
+</html>

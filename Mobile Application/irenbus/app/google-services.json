@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "862290408776",
+    "firebase_url": "https://irenbus-app.firebaseio.com",
+    "project_id": "irenbus-app",
+    "storage_bucket": "irenbus-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:862290408776:android:b8805c94e74ab828",
+        "android_client_info": {
+          "package_name": "com.irenbus.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "862290408776-m4v0aqo9g3qqslkdcieo50mspd7008ur.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2oDioGs6wGU6A4RFr379CjC4xdMyfjAw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "862290408776-m4v0aqo9g3qqslkdcieo50mspd7008ur.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
